@@ -4,12 +4,16 @@ These two scripts are currently beeing used to backup and restore the LDAP tree 
 
 
 
-**Quick install**
+**Copy and paste installation**
 
 wget https://raw.githubusercontent.com/alexanderjackson/ldap-backup-and-restore/master/ldap-backup -O /usr/local/sbin/ldap-backup
+
 wget https://raw.githubusercontent.com/alexanderjackson/ldap-backup-and-restore/master/ldap-restore -O /usr/local/sbin/ldap-restore
+
 chown root.root /usr/local/sbin/ldap-backup /usr/local/sbin/ldap-restore
+
 chmod 500 /usr/local/sbin/ldap-backup /usr/local/sbin/ldap-restore
+
 
 
 **Installation**
