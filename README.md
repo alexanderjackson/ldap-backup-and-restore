@@ -14,6 +14,7 @@ Scripts are created and used on Debian Wheezy (64bit) with LDAP in the new manne
 
 Just run ldap-backup with root priviliges. 
 
+
 **This will get backed**
 
 * LDAP config data (slapcat -n 0)
