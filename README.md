@@ -34,7 +34,7 @@ Just run ldap-backup with root privileges.
 * LDAP accesslog (slapcat -n 2) - Disabled by default
 * Folders: /etc/ldap and /var/lib/ldap
 
-Backups will get saved to /var/backups/ldap-$(date +%Y%m%d-%H%M%S)
+Backups will get saved to /var/backups/ldap/$(date +%Y%m%d-%H%M%S)
 
 
 
@@ -52,10 +52,29 @@ Just run ldap-restore with root priviliges but make sure you have a full backup 
 * Accept restoration with [y] or abort with [n]
 * The script will call ldap-backup before actually proceeding with the restoration
 * slapd will get stopped
-* The folder /var/lib/ldap will get copied to /var/lib/ldap-backup-$(date +%Y%m%d-%H%M%S)
+* The folder /etc/ldap/slapd.d will get copied to /etc/ldap/slapd.d-backup/$(date +%Y%m%d-%H%M%S)
+* The folder /var/lib/ldap will get copied to /var/lib/ldap-backup/$(date +%Y%m%d-%H%M%S)
 * The content of /var/lib/ldap/ will get deleted
 * config.ldif and domain.ldif from backup folder will get imported with slapadd
 * File ownership (openldap:openldap) on /var/lib/ldap/ and /etc/ldap/slapd.d/ will be preserved
 * slapd will get started
 
 If for whatever reason the restore attempt with ldap-restore fails, you can manually try to restore your LDAP server from the *.tgz packages within the backup folders (/var/lib/ldap-backup-$(date +%Y%m%d-%H%M%S)) created by ldap-backup. The *.tgz files are created by ldap-backup but are not used by ldap-restore. ldap-restore only tries to restore by reimporting config.ldif and domain.ldif. The *.tgz files are intended as a last resort if something goes wrong. Not sure if they really include everything for a desaster recovery. Also the folders where backed up while LDAP was actually running. Could this produce faulty backups?
+
+
+
+**Running backups automatically**
+
+Run as cronjob
+
+```bash
+15 0 * * * /usr/local/sbin/ldap-backup
+```
+
+
+**Houskeeping**
+
+If you are running ldap-backup via cronjob the folder /var/backups/ldap/ will just keep on filling. Therefor you should manually delete unneeded backups from time to time.
+
+Running ldap-restores creates additional backups under /etc/ldap/slapd.d-backup/ and /var/lib/ldap-backup/. Hopefully these folders are empty most of the time ;-)
+
