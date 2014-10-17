@@ -1,6 +1,6 @@
 **Preface**
 
-These scripts are currently beeing used to backup and restore the LDAP tree of an Zarafa Server. They have been tested to work with Debian Wheezy (64bit) and OpenLDAP supporting live configuration.
+These scripts are currently beeing used to backup and restore the LDAP tree of an Zarafa Server. They have been tested to work with Debian Wheezy (64bit) and OpenLDAP with OLC (cn=config) configuration.
 
 
 
