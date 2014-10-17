@@ -1,0 +1,68 @@
+#!/bin/bash
+LATEST_BACKUP=$(ls -dt /var/backups/ldap-* | head -n 1)
+echo
+echo + - - - Listing the 7 newest backup folders -------------- - - - +
+echo "+ - - - (more backups might be available...) ------------- - - - +"
+echo
+ls -dthl /var/backups/ldap-* | head -n 6
+echo
+echo
+echo + - - - Select the backup folder from which to restore --- - - - +
+echo "+ - - - (newest backup selected by default) -------------- - - - +"
+echo
+read -e -p "Enter: [${LATEST_BACKUP}]" BACKUP_PATH
+BACKUP_PATH=${BACKUP_PATH:-$LATEST_BACKUP}
+echo
+echo
+echo Folder ${BACKUP_PATH} selected
+echo for the restoring procedure.
+echo
+echo
+echo + - - - Are you sure you want to continue? --------------- - - - +
+echo "+ - - - (you might seriously mess things up continuing) -- - - - +"
+echo
+echo
+read -p "Did you make separate backups? You've been warned! Proceed? [y/n] " -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+if [ -z '${BACKUP_PATH}' ];
+then
+echo
+echo + - - - No backup folder provided. Aborting! ------------- - - - +
+echo
+else
+echo
+echo + - - - Creating new backup with ldap-backup script ------ - - - +
+echo "+ - - - (better safe than sorry ...) --------------------- - - - +"
+echo
+ldap-backup
+echo
+echo + - - - Restoring ---------------------------------------- - - - +
+echo
+service slapd stop
+service slapd status # Failing is o.k. because service is down ...
+cp -a /var/lib/ldap/ /var/lib/ldap-backup-$(date +%Y%m%d-%H%M%S)
+rm -r /var/lib/ldap/*
+slapadd -F /etc/ldap/slapd.d -n 0 -l ${BACKUP_PATH}/config.ldif
+slapadd -F /etc/ldap/slapd.d -n 1 -l ${BACKUP_PATH}/domain.ldif
+# mkdir /var/lib/ldap/accesslog
+# slapadd -F /etc/ldap/slapd.d -n 2 -l ${BACKUP_PATH}/access.ldif
+chown -R openldap:openldap /etc/ldap/slapd.d/
+chown -R openldap:openldap /var/lib/ldap/
+service slapd start
+service slapd status
+echo
+echo + - - - INFO ---------------------------------------------- - - - +
+echo
+echo "  Manual restore of /etc/ldap and /var/lib/ldap from *.tgz"
+echo "  files is possible. Here the additional backup files from your"
+echo "  selected backup folder ${BACKUP_PATH}:"
+echo
+ls ${BACKUP_PATH}/*.tgz
+echo
+echo + - - - ---------------------------------------------- DONE - - - +
+fi
+else
+echo Aborting!
+fi
