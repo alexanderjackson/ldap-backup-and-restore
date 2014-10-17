@@ -1,7 +1,15 @@
 **Preface**
 
-Scripts are created and used on Debian Wheezy (64bit) with LDAP in the new manner (live config)
+These two scripts are currently beeing used to backup and restore the LDAP tree of an Zarafa Server. Skripts have been tested to work with Debian Wheezy (64bit) and OpenLDAP supporting live configuration.
 
+
+
+**Quick install**
+
+wget https://raw.githubusercontent.com/alexanderjackson/ldap-backup-and-restore/master/ldap-backup -O /usr/local/sbin/ldap-backup
+wget https://raw.githubusercontent.com/alexanderjackson/ldap-backup-and-restore/master/ldap-restore -O /usr/local/sbin/ldap-restore
+chown root.root /usr/local/sbin/ldap-backup /usr/local/sbin/ldap-restore
+chmod 500 /usr/local/sbin/ldap-backup /usr/local/sbin/ldap-restore
 
 
 **Installation**
@@ -11,10 +19,9 @@ Scripts are created and used on Debian Wheezy (64bit) with LDAP in the new manne
 * chmod 500 /usr/local/sbin/ldap-backup /usr/local/sbin/ldap-restore
 
 
-
 **Create backup with ldap-backup**
 
-Just run ldap-backup with root priviliges. 
+Just run ldap-backup with root privileges.
 
 
 
@@ -49,4 +56,4 @@ Just run ldap-restore with root priviliges but make sure you have a full backup 
 * File ownership (openldap:openldap) on /var/lib/ldap/ and /etc/ldap/slapd.d/ will be preserved
 * slapd will get started
 
-If for whatever reason the restore attempt with ldap-restore fails, you can manually try to restore your LDAP server from the *.tgz packages within the backup folders (/var/lib/ldap-backup-$(date +%Y%m%d-%H%M%S)) created by ldap-backup. The *.tgz files are created by ldap-backup but are not used by ldap-restore. ldap-restore only tries to restore by reimporting config.ldif and domain.ldif. The *.tgz files are intendet as a last resort if something goes wrong. Not sure if they really include everything for a desaster recovery. Also the folders where backed up while LDAP was actually running. Could this produce faulty backups?
+If for whatever reason the restore attempt with ldap-restore fails, you can manually try to restore your LDAP server from the *.tgz packages within the backup folders (/var/lib/ldap-backup-$(date +%Y%m%d-%H%M%S)) created by ldap-backup. The *.tgz files are created by ldap-backup but are not used by ldap-restore. ldap-restore only tries to restore by reimporting config.ldif and domain.ldif. The *.tgz files are intended as a last resort if something goes wrong. Not sure if they really include everything for a desaster recovery. Also the folders where backed up while LDAP was actually running. Could this produce faulty backups?
