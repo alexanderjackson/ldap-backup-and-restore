@@ -1,22 +1,18 @@
 **Preface**
-
 Scripts are created and used on Debian Wheezy (64bit) with LDAP in the new manner (live config)
 
 
 **Installation**
-
 * Copy files to scripts to /usr/local/sbin/
 * chown root.root /usr/local/sbin/ldap-backup /usr/local/sbin/ldap-restore
 * chmod 500 /usr/local/sbin/ldap-backup /usr/local/sbin/ldap-restore
 
 
 **Create backup with ldap-backup**
-
 Just run ldap-backup with root priviliges. 
 
 
 **This will get backed**
-
 * LDAP config data (slapcat -n 0)
 * LDAP DIT data (slapcat -n 1) 
 * LDAP accesslog (slapcat -n 2) - Disabled by default
@@ -26,7 +22,6 @@ Backups will get saved to /var/backups/ldap-$(date +%Y%m%d-%H%M%S)
 
 
 **Restore backup with ldap-restore**
-
 Just run ldap-restore with root priviliges but make sure you have a full backup before attempting to restore. Backing up with ldap-backup might not be sufficient enough.
 
 
