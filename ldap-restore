@@ -1,14 +1,23 @@
 #!/bin/bash
+#title           :ldap-restore
+#description     :Perform LDAP restore on Zarafa server
+#author          :Alexander Jackson (alexander.jackson@jackson-it.de)
+#date            :20141017
+#version         :0.1
+#usage           :ldap-restore
+#notes           :Save in /usr/local/sbin/ chown: root.root chmod: 500
+#bash_version    :GNU bash, Version 4.2.37(1)-release (x86_64-pc-linux-gnu)
+#==============================================================================
 LATEST_BACKUP=$(ls -dt /var/backups/ldap-* | head -n 1)
 echo
-echo + - - - Listing the 7 newest backup folders -------------- - - - +
-echo "+ - - - (more backups might be available...) ------------- - - - +"
+echo + - - - Listing the 7 newest backup folders-------- -------------- - - - +
+echo "+ - - - (more backups might be available...) --------------------- - - - +"
 echo
 ls -dthl /var/backups/ldap-* | head -n 6
 echo
 echo
-echo + - - - Select the backup folder from which to restore --- - - - +
-echo "+ - - - (newest backup selected by default) -------------- - - - +"
+echo + - - - Select the backup folder from which to restore ----------- - - - +
+echo "+ - - - (newest backup selected by default) ---------------------- - - - +"
 echo
 read -e -p "Enter: [${LATEST_BACKUP}]" BACKUP_PATH
 BACKUP_PATH=${BACKUP_PATH:-$LATEST_BACKUP}
@@ -18,8 +27,8 @@ echo Folder ${BACKUP_PATH} selected
 echo for the restoring procedure.
 echo
 echo
-echo + - - - Are you sure you want to continue? --------------- - - - +
-echo "+ - - - (you might seriously mess things up continuing) -- - - - +"
+echo + - - - Are you sure you want to continue? ----------------------- - - - +
+echo "+ - - - (you might seriously mess things up continuing) ---------- - - - +"
 echo
 echo
 read -p "Did you make separate backups? You've been warned! Proceed? [y/n] " -r
@@ -29,16 +38,16 @@ then
 if [ -z '${BACKUP_PATH}' ];
 then
 echo
-echo + - - - No backup folder provided. Aborting! ------------- - - - +
+echo + - - - No backup folder provided. Aborting! --------------------- - - - +
 echo
 else
 echo
-echo + - - - Creating new backup with ldap-backup script ------ - - - +
-echo "+ - - - (better safe than sorry ...) --------------------- - - - +"
+echo + - - - Creating new backup with ldap-backup script -------------- - - - +
+echo "+ - - - (better safe than sorry ...) ----------------------------- - - - +"
 echo
 ldap-backup
 echo
-echo + - - - Restoring ---------------------------------------- - - - +
+echo + - - - Restoring ------------------------------------------------ - - - +
 echo
 service slapd stop
 service slapd status # Failing is o.k. because service is down ...
@@ -53,7 +62,7 @@ chown -R openldap:openldap /var/lib/ldap/
 service slapd start
 service slapd status
 echo
-echo + - - - INFO ---------------------------------------------- - - - +
+echo + - - - INFO ------------------------------------------------------ - - - +
 echo
 echo "  Manual restore of /etc/ldap and /var/lib/ldap from *.tgz"
 echo "  files is possible. Here the additional backup files from your"
@@ -61,7 +70,7 @@ echo "  selected backup folder ${BACKUP_PATH}:"
 echo
 ls ${BACKUP_PATH}/*.tgz
 echo
-echo + - - - ---------------------------------------------- DONE - - - +
+echo + - - - ------------------------------------------------------ DONE - - - +
 fi
 else
 echo Aborting!
