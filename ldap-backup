@@ -1,12 +1,27 @@
 #!/bin/bash
-#title           :ldap-backup
-#description     :Perform LDAP backup on Zarafa server
-#author		 :Alexander Jackson (alexander.jackson@jackson-it.de)
-#date            :20141017
-#version         :0.1
-#usage		 :ldap-backup
-#notes           :Save in /usr/local/sbin/ chown: root.root chmod: 500
-#bash_version    :GNU bash, Version 4.2.37(1)-release (x86_64-pc-linux-gnu)
+#
+# title           :ldap-backup
+# description     :Perform LDAP backup on Zarafa server
+# author          :Alexander Jackson - Jackson IT
+# date            :20141017
+# version         :0.1
+# usage	          :ldap-backup
+# notes           :Save in /usr/local/sbin/ chown: root.root chmod: 500
+# bash_version    :GNU bash, Version 4.2.37(1)-release (x86_64-pc-linux-gnu)
+#
+# Copyright 2014, Alexander Jackson <alexander.jackson@jackson-it.de>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License at <http://www.gnu.org/licenses/> for
+# more details.
+#
 #==============================================================================
 BACKUP_PATH=/var/backups/ldap-$(date +%Y%m%d-%H%M%S)
 echo
