@@ -30,9 +30,9 @@ echo + - - - LDAP-BACKUP ---------------------------------------------- - - - +
 echo
 echo "  Creating backup at ${BACKUP_PATH}"
 mkdir -p ${BACKUP_PATH}
-nice slapcat -n 0 > ${BACKUP_PATH}/config.ldif
-nice slapcat -n 1 > ${BACKUP_PATH}/domain.ldif
-#nice slapcat -n 2 > ${BACKUP_PATH}/access.ldif
+/usr/bin/nice /usr/sbin/slapcat -n 0 > ${BACKUP_PATH}/config.ldif
+/usr/bin/nice /usr/sbin/slapcat -n 1 > ${BACKUP_PATH}/domain.ldif
+#/usr/bin/nice /usr/sbin/slapcat -n 2 > ${BACKUP_PATH}/access.ldif
 chmod 640 ${BACKUP_PATH}/*.ldif
 tar cpzf ${BACKUP_PATH}/etc_ldap.tgz /etc/ldap >/dev/null 2>&1
 tar cpzf ${BACKUP_PATH}/var_lib_ldap.tgz /var/lib/ldap >/dev/null 2>&1
