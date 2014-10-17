@@ -23,7 +23,8 @@
 # more details.
 #
 #==============================================================================
-BACKUP_PATH=/var/backups/ldap-$(date +%Y%m%d-%H%M%S)
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+BACKUP_PATH=/var/backups/ldap/${TIMESTAMP}
 echo
 echo + - - - LDAP-BACKUP ---------------------------------------------- - - - +
 echo

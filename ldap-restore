@@ -22,12 +22,14 @@
 # more details.
 #
 #==============================================================================
-LATEST_BACKUP=$(ls -dt /var/backups/ldap-* | head -n 1)
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+BACKUP_PATH=/var/backups/ldap/
+LATEST_BACKUP=$(ls -dt ${BACKUP_PATH}* | head -n 1)
 echo
 echo + - - - Listing the 7 newest backup folders-------- -------------- - - - +
 echo "+ - - - (more backups might be available...) --------------------- - - - +"
 echo
-ls -dthl /var/backups/ldap-* | head -n 6
+ls -dthl ${BACKUP_PATH}* | head -n 6
 echo
 echo
 echo + - - - Select the backup folder from which to restore ----------- - - - +
@@ -63,26 +65,30 @@ ldap-backup
 echo
 echo + - - - Restoring ------------------------------------------------ - - - +
 echo
-service slapd stop
-service slapd status # Failing is o.k. because service is down ...
-cp -a /var/lib/ldap/ /var/lib/ldap-backup-$(date +%Y%m%d-%H%M%S)
-rm -r /var/lib/ldap/*
-slapadd -F /etc/ldap/slapd.d -n 0 -l ${BACKUP_PATH}/config.ldif
-slapadd -F /etc/ldap/slapd.d -n 1 -l ${BACKUP_PATH}/domain.ldif
+service slapd stop ; service slapd status # Failing is o.k. because service is down ...
+mkdir -p /etc/ldap/slapd.d-backup/ /var/lib/ldap-backup/
+cp -a /etc/ldap/slapd.d/ /etc/ldap/slapd.d-backup/${TIMESTAMP} # Additional backup
+cp -a /var/lib/ldap/ /var/lib/ldap-backup/${TIMESTAMP} # Additional backup
+rm -r /etc/ldap/slapd.d/* /var/lib/ldap/* # Emptying folders
+slapadd -F /etc/ldap/slapd.d -n 0 -l ${BACKUP_PATH}/config.ldif # Import LDAP config
+slapadd -F /etc/ldap/slapd.d -n 1 -l ${BACKUP_PATH}/domain.ldif # Import DIT data
 # mkdir /var/lib/ldap/accesslog
 # slapadd -F /etc/ldap/slapd.d -n 2 -l ${BACKUP_PATH}/access.ldif
-chown -R openldap:openldap /etc/ldap/slapd.d/
-chown -R openldap:openldap /var/lib/ldap/
-service slapd start
-service slapd status
+chown -R openldap:openldap /etc/ldap/slapd.d/ /var/lib/ldap/ # Fixing ownership
+service slapd start ; service slapd status # Starting und testing slapd 
 echo
 echo + - - - INFO ------------------------------------------------------ - - - +
 echo
-echo "  Manual restore of /etc/ldap and /var/lib/ldap from *.tgz"
-echo "  files is possible. Here the additional backup files from your"
+echo "  Manual restore of /etc/ldap and /var/lib/ldap from *.tgz should"
+echo "  be possible. Here the additional backup files from your"
 echo "  selected backup folder ${BACKUP_PATH}:"
 echo
 ls ${BACKUP_PATH}/*.tgz
+echo
+echo "  Two additional backups have been created before the restore attempt."
+echo "  You can find theme at:"
+echo "  1. /etc/ldap/slapd.d-backup/${TIMESTAMP}"
+echo "  2. /var/lib/ldap-backup/${TIMESTAMP}"
 echo
 echo + - - - ------------------------------------------------------ DONE - - - +
 fi
